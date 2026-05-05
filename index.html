@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oleg Szoka — ML & Robotics Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f12;
+    --bg2: #13161c;
+    --bg3: #1a1e27;
+    --line: rgba(255,255,255,0.08);
+    --line2: rgba(255,255,255,0.14);
+    --text: #e8e6df;
+    --muted: #7a7f8e;
+    --accent: #c9aa6e;
+    --accent2: #8fb5d4;
+    --white: #f5f3ee;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 1; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 22px 0;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(13,15,18,0.92);
+    backdrop-filter: blur(16px);
+    border-color: var(--line);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 80px;
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 80px;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow span {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 420px;
+    margin-bottom: 48px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #0d0f12;
+  }
+  .btn-primary:hover { background: #d9bb80; transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--line2);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Hero visual */
+  .hero-visual {
+    position: relative;
+  }
+  .hero-card {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .stat-item { border-left: 2px solid var(--accent); padding-left: 16px; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tech-tag {
+    font-size: 11px;
+    padding: 5px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .tech-tag.highlight { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── SECTION COMMON ─── */
+  section { padding: 100px 0; }
+  .section-header { margin-bottom: 64px; }
+  .section-num {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-num::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--accent); }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .section-sub { font-size: 15px; color: var(--muted); margin-top: 16px; max-width: 560px; }
+
+  /* ─── ABOUT ─── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-text p { color: var(--muted); line-height: 1.9; margin-bottom: 20px; }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .skills-block { display: flex; flex-direction: column; gap: 20px; }
+  .skill-row { display: flex; flex-direction: column; gap: 8px; }
+  .skill-top { display: flex; justify-content: space-between; align-items: center; }
+  .skill-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .skill-pct { font-size: 12px; color: var(--muted); }
+  .skill-bar { height: 2px; background: var(--line); border-radius: 1px; overflow: hidden; }
+  .skill-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 1px; transform-origin: left; animation: growBar 1.2s ease forwards; animation-play-state: paused; }
+  .skill-fill.animated { animation-play-state: running; }
+  @keyframes growBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* ─── PROJECTS ─── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover { border-color: var(--line2); transform: translateY(-4px); }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 24px;
+    background: var(--bg3);
+  }
+  .project-tag {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .project-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .project-desc { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+  .project-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    margin-top: auto;
+  }
+  .project-tech { display: flex; gap: 8px; flex-wrap: wrap; }
+  .p-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    background: var(--bg3);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: 2px;
+  }
+  .project-arrow { color: var(--accent); font-size: 18px; transition: transform 0.2s; }
+  .project-card:hover .project-arrow { transform: translate(3px, -3px); }
+
+  /* ─── CONTACT ─── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .contact-text h2 { margin-bottom: 20px; }
+  .contact-text p { color: var(--muted); line-height: 1.9; margin-bottom: 36px; }
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+  .contact-link:hover { border-color: var(--accent); }
+  .contact-link-icon { font-size: 18px; width: 24px; text-align: center; }
+  .contact-link-info { flex: 1; }
+  .contact-link-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .contact-link-val { font-size: 14px; color: var(--text); margin-top: 2px; }
+  .contact-link-arrow { color: var(--muted); transition: color 0.2s; }
+  .contact-link:hover .contact-link-arrow { color: var(--accent); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--muted);
+  }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+
+  /* ─── DIVIDER ─── */
+  .divider { height: 1px; background: var(--line); margin: 0; }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .container { padding: 0 24px; }
+    .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-visual { display: none; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Oleg Szoka</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow"><span>ML Engineer &amp; Robotics</span></div>
+        <h1>Building <em>intelligent</em><br>automation</h1>
+        <p class="hero-desc">
+          Industrial engineering background fused with deep learning and Python.
+          I connect robotics hardware with intelligent ML systems that solve real production problems.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="#contact" class="btn btn-outline">Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="stat-grid">
+            <div class="stat-item">
+              <div class="stat-num">3+</div>
+              <div class="stat-label">Years in ML</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">10+</div>
+              <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">CNN</div>
+              <div class="stat-label">Deep Learning</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">ROS</div>
+              <div class="stat-label">Robotics</div>
+            </div>
+          </div>
+          <div class="tech-list">
+            <span class="tech-tag highlight">Python</span>
+            <span class="tech-tag highlight">PyTorch</span>
+            <span class="tech-tag">TensorFlow</span>
+            <span class="tech-tag">OpenCV</span>
+            <span class="tech-tag">ROS</span>
+            <span class="tech-tag">LSTM</span>
+            <span class="tech-tag">Docker</span>
+            <span class="tech-tag">Linux</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <div class="section-header">
+          <div class="section-num">01 — About</div>
+          <h2>Where hardware<br>meets intelligence</h2>
+        </div>
+        <p>
+          My journey started on the factory floor — designing production machines and robotic workstations.
+          That hands-on engineering background gave me a perspective most ML engineers lack:
+          <strong>I understand the physical constraints that models must operate within.</strong>
+        </p>
+        <p>
+          Today I work at the intersection of industrial automation and machine learning,
+          building systems that perceive, reason, and act in the real world.
+          Whether it's a CNN detecting defects in a production line or an LSTM predicting
+          equipment failure before it happens.
+        </p>
+        <p>
+          Currently focused on transitioning fully into <strong>ML Engineering</strong> and <strong>Robotics AI</strong> —
+          documenting the process openly on GitHub.
+        </p>
+      </div>
+
+      <div class="skills-block reveal">
+        <div class="section-header" style="margin-bottom: 40px;">
+          <div class="section-num">Skills</div>
+          <h2 style="font-size: 32px;">Technical expertise</h2>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Python / ML Stack</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Deep Learning (CNN, RNN, LSTM)</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Robotics / ROS</span><span class="skill-pct">75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Computer Vision (OpenCV)</span><span class="skill-pct">78%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Industrial Engineering</span><span class="skill-pct">95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">02 — Projects</div>
+      <h2>Selected work</h2>
+      <p class="section-sub">A selection of ML and robotics projects — from generative models to production-ready automation tools.</p>
+    </div>
+
+    <div class="projects-grid">
+
+      <a href="https://github.com/OlegS2023" target="_blank" class="project-card reveal">
+        <div class="project-icon">🤖</div>
+        <div class="project-tag">Deep Learning</div>
+        <div class="project-title">CNN Defect Detection</div>
+        <p class="project-desc">Convolutional neural network for automated visual inspection of manufactured parts. Trained on custom industrial dataset with real-time inference pipeline.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="p-tag">PyTorch</span>
+            <span class="p-tag">OpenCV</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/OlegS2023" target="_blank" class="project-card reveal">
+        <div class="project-icon">📈</div>
+        <div class="project-tag">Time Series</div>
+        <div class="project-title">LSTM Predictive Maintenance</div>
+        <p class="project-desc">Recurrent network model predicting equipment failure from sensor data streams. Reduces unplanned downtime by flagging anomalies before they escalate.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="p-tag">TensorFlow</span>
+            <span class="p-tag">Pandas</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/OlegS2023" target="_blank" class="project-card reveal">
+        <div class="project-icon">🦾</div>
+        <div class="project-tag">Robotics + ML</div>
+        <div class="project-title">ROS + Vision Integration</div>
+        <p class="project-desc">Connecting ROS robotic workstations with machine vision models. Real-time object detection driving pick-and-place decision logic on industrial arms.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="p-tag">ROS</span>
+            <span class="p-tag">Python</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/OlegS2023" target="_blank" class="project-card reveal">
+        <div class="project-icon">🎨</div>
+        <div class="project-tag">Generative AI</div>
+        <div class="project-title">Generative Model Experiments</div>
+        <p class="project-desc">Exploration of VAEs and GANs for synthetic data generation. Used to augment small industrial datasets where real labeled data is scarce.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="p-tag">PyTorch</span>
+            <span class="p-tag">NumPy</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/OlegS2023" target="_blank" class="project-card reveal">
+        <div class="project-icon">🐍</div>
+        <div class="project-tag">Python Tools</div>
+        <div class="project-title">ML Pipeline Utilities</div>
+        <p class="project-desc">Collection of Python modules for data preprocessing, experiment tracking, and model evaluation. Built for reuse across multiple ML projects.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="p-tag">Python</span>
+            <span class="p-tag">Scikit-learn</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/OlegS2023" target="_blank" class="project-card reveal">
+        <div class="project-icon">🏭</div>
+        <div class="project-tag">Automation</div>
+        <div class="project-title">Robotic Workstation Design</div>
+        <p class="project-desc">Industrial engineering background applied to robotic cell layout and safety system design. Foundation for integrating ML-driven control into physical automation.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="p-tag">Engineering</span>
+            <span class="p-tag">CAD</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-text reveal">
+        <div class="section-num">03 — Contact</div>
+        <h2>Let's build<br>something together</h2>
+        <p>Open to ML engineering roles, robotics AI projects, and collaborations at the intersection of industrial automation and machine learning.</p>
+        <a href="mailto:olegszoka@gmail.com" class="btn btn-primary">Send an Email ↗</a>
+      </div>
+      <div class="contact-links reveal">
+        <a href="mailto:olegszoka@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉</span>
+          <div class="contact-link-info">
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-val">olegszoka@gmail.com</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+        <a href="https://github.com/OlegS2023" target="_blank" class="contact-link">
+          <span class="contact-link-icon">⌥</span>
+          <div class="contact-link-info">
+            <div class="contact-link-label">GitHub</div>
+            <div class="contact-link-val">github.com/OlegS2023</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+        <a href="https://www.linkedin.com/in/oleg-szoka-008447211/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">in</span>
+          <div class="contact-link-info">
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-val">Oleg Szoka</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-name">Oleg Szoka — ML &amp; Robotics Engineer</span>
+      <span class="footer-copy">© 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Skill bar animation
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.skill-fill').forEach(bar => bar.classList.add('animated'));
+        skillObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skills-block').forEach(el => skillObserver.observe(el));
+</script>
+</body>
+</html>
